@@ -13,8 +13,6 @@ const albumlist = require("./controllers/albumlist");
 const fileupload = require("./controllers/fileupload");
 const userprofile = require("./controllers/userprofile");
 const albumdetails = require("./controllers/albumdetails");
-// const uploadfiledetails = require("./controllers/uploadfiledetails");
-// const profile = require('./controllers/profile');
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -46,7 +44,7 @@ app.post("/searchalb", albumlist.handleSearch(db));
 
 app.post("/upload", fileupload.handleFileupload(db, fs));
 
-app.post("/userProfile", userprofile.handleProfie(db));
+app.post("/userprofile", userprofile.handleProfile(db));
 
 app.post("/searchalbdetails", albumdetails.handleAlbumdetails(db));
 

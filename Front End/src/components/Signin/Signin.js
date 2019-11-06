@@ -5,7 +5,8 @@ class Signin extends React.Component {
     super(props);
     this.state = {
       signInUsername: "",
-      signInPassword: ""
+      signInPassword: "",
+      dataresults: []
     };
   }
 
@@ -33,14 +34,18 @@ class Signin extends React.Component {
         password: this.state.signInPassword
       })
     })
-      .then(this.handleErrors)
-      .then(user => {
-        if (user) {
-          this.props.loadUser(user);
-          this.props.onRouteChange("home");
+      .then(response => response.json())
+      .then(output => {
+        if (output != "Wrong Credentials") {
+          if (output != []) {
+            this.setState({
+              dataresults: output
+            });
+            this.props.loadUser(this.state.dataresults);
+            this.props.onRouteChange("home");
+          }
         }
-      })
-      .catch(error => console.log(error.response));
+      });
   };
 
   render() {

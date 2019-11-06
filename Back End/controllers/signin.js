@@ -1,29 +1,30 @@
 const handleSignin = db => (req, res) => {
   const { username, password } = req.body;
-  // console.log(username + password);
+  console.log(username + password);
   if (!username || !password) {
     return res.status(400).json("incorrect form submission");
   }
   db.query(
     {
-      sql: "SELECT Username,Password FROM userdata WHERE Username = ?",
+      sql: "SELECT UserID,Username,Password FROM userdata WHERE Username = ?",
       values: [username]
     },
     function(error, results, fields) {
       if (error) {
-        console.log("SQL Sign in not working");
         throw error;
       }
       // const isValid = bcrypt.compareSync(password, results[0].Password);
-      // console.log(results);
-      if (isEmpty(results)) {
+      const data = Object.values(JSON.parse(JSON.stringify(results)));
+      console.log(data);
+      if (!results) {
         res.status(400).json("User does not exist");
       } else {
-        // console.log("HERE");
-        if (results[0].Password === password) {
-          res.json(results[0]);
+        console.log(data[0].Password + " vs " + password);
+        if (data[0].Password === password) {
+          console.log("HERE");
+          res.send(data);
         } else {
-          res.status(400).json("Wrong Crendentials");
+          res.status(400).json("Wrong Credentials");
         }
       }
     }

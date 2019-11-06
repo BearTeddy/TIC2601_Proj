@@ -5,28 +5,20 @@ import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 import AlbumList from "./components/AlbumList/AlbumList";
 import Fileupload from "./components/fileupload/fileupload";
-import Userprofile from "./components/userprofile/userprofile";
+import Userprofile from "./components/UserCard/UserCard";
 class App extends Component {
   constructor() {
     super();
     this.state = {
       route: "signin",
       isSignedIn: false,
-      user: {
-        id: "",
-        name: "",
-        email: ""
-      }
+      user: []
     };
   }
 
   loadUser = data => {
     this.setState({
-      user: {
-        id: data.id,
-        name: data.name,
-        email: data.email
-      }
+      user: data
     });
   };
 
@@ -59,7 +51,10 @@ class App extends Component {
         ) : route === "fileupload" ? (
           <Fileupload onRouteChange={this.onRouteChange} />
         ) : route === "userprofile" ? (
-          <Userprofile onRouteChange={this.onRouteChange} />
+          <Userprofile
+            onRouteChange={this.onRouteChange}
+            UserID={this.state.user[0].UserID}
+          />
         ) : (
           <Register
             loadUser={this.loadUser}

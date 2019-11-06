@@ -1,68 +1,30 @@
-// const handleSignin = db => (req, res) => {
-//   const { username, password } = req.body;
-//   // console.log(username + password);
-//   if (!username || !password) {
-//     return res.status(400).json("incorrect form submission");
-//   }
-//   db.query(
-//     {
-//       sql: "SELECT Username,Password FROM userdata WHERE Username = ?",
-//       values: [username]
-//     },
-//     function(error, results, fields) {
-//       if (error) {
-//         console.log("SQL Sign in not working");
-//         throw error;
-//       }
-//       // const isValid = bcrypt.compareSync(password, results[0].Password);
-//       // console.log(results);
-//       if (isEmpty(results)) {
-//         res.status(400).json("User does not exist");
-//       } else {
-//         console.log("HERE");
-//         if (results[0].Password === password) {
-//           res.json(results[0]);
-//         } else {
-//           res.status(400).json("Wrong Crendentials");
-//         }
-//       }
-//     }
-//   );
-// };
-
 const handleProfile = db => (req, res) => {
-  const { name, username, password, email,  } = req.body;
-  //const val = "%" + keyword + "%";
+  const { UserID } = req.body;
+  console.log(UserID);
   db.query(
     {
       sql:
-        "SELECT name, username, password, email FROM userdata;",
-        
-      values: [name, username, password, email]
+        "SELECT UserID, Name, Username, Password, Email FROM userdata where UserID = ?;",
+
+      values: [UserID]
     },
     function(error, results, fields) {
       if (error) {
         throw error;
-        console.log(sql);
       }
       // const isValid = bcrypt.compareSync(password, results[0].Password);
+      const data = Object.values(JSON.parse(JSON.stringify(results)));
+      console.log(data);
       if (!results) {
-        res.status(400).json("Such Profile does not exists");
+        res.status(400).json("User does not exist");
       } else {
-        // const isValid = bcrypt.compareSync(password, dboutput[0].Password);
-        res.send(JSON.stringify(results));
+        console.log(data);
+        res.send(data);
       }
     }
   );
 };
 
-// function isEmpty(obj) {
-//   for (var key in obj) {
-//     if (obj.hasOwnProperty(key)) return false;
-//   }
-//   return true;
-// }
-
 module.exports = {
-  handleProfie: handleProfile
+  handleProfile: handleProfile
 };

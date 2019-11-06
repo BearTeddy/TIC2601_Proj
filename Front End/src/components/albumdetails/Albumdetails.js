@@ -39,7 +39,7 @@ class Albumdetails extends React.Component {
         {this.state.dataresults.map((Album, i) => {
           return (
             <p key={i} class="measure lh-copy">
-              {i} . {Album.Song_Title}
+              {i + 1} . {Album.Song_Title}
             </p>
           );
         })}

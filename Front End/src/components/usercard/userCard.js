@@ -1,142 +1,154 @@
 import React from "react";
-// import MaterialTable from "material-table";
-// import Button from "material-ui/Button";
-// import Babel from "material-ui/styles";
-// import { save} from "material-ui/icons";
-import ReactTable from 'react-table';
+import { Recoverable } from "repl";
 
-    // return (
-    //   <MaterialTable
-    //     title="Multiple Actions Preview"
-    //     columns={[
-    //       { title: 'Name', field: 'name' },
-    //       { title: 'Surname', field: 'surname' },
-    //       { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-    //       {
-    //         title: 'Birth Place',
-    //         field: 'birthCity',
-    //         lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-    //       },
-    //     ]}
-    //     data={[
-    //       { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-    //       { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-    //     ]}        
-    //     actions={[
-    //       {
-    //         icon: 'save',
-    //         tooltip: 'Save User',
-    //         onClick: (event, rowData) => alert("You saved " + rowData.name)
-    //       },
-    //       {
-    //         icon: 'delete',
-    //         tooltip: 'Delete User',
-    //         onClick: (event, rowData) => confirm("You want to delete " + rowData.name)
-    //       }
-    //     ]}
-    //   />
-    // )
-//   const columns = [
-//   {
-//     Header: 'Name',
-//     accessor: 'name',
-//     headerStyle: { whiteSpace: 'unset' },
-//     style: { whiteSpace: 'unset' },
-//   },
-//   {
-//     Header: 'Username',
-//     accessor: 'username',
-//     headerStyle: { whiteSpace: 'unset' },
-//     style: { whiteSpace: 'unset' },
-//   },
-//   {
-//     Header: 'Password',
-//     accessor: 'password',
-//     headerStyle: { whiteSpace: 'unset' },
-//     style: { whiteSpace: 'unset' },
-//   },
-//   {
+class UserCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      UserN: "",
+      UserP: "",
+      UserE: "",
+      UserNN: "",
+      readOnly: true
+    };
+  }
 
-//     Header: 'Email',
-//     accessor: 'email',
-//     headerStyle: { whiteSpace: 'unset' },
-//     style: { whiteSpace: 'unset' },
-//     maxWidth: 150,
-//   },
-// ];
-const UserCard = ({
-  key,
-  name,
-  username,
-  password,
-  email,
-}) => {
-    // return(
-    //   // <ReactTable
-    //   //   columns = {columns}
-    //   //   data = {{name,username,password,email}}
-    //   //   >
-    //   // </ReactTable>
-     
-    //   <table className="table table-bordered table-responsive">
-    //     <thread>
-    //       <tr style={{ float: "center" }}>
-    //         <th>Name</th>
-    //         <th>UserName</th>
-    //         <th>Password</th>
-    //         <th>Email</th>
-    //       </tr>
-    //     </thread>
-    //     <tbody>
-    //       <tr>
-            
-    //         <td>{name}</td>
-    //         <td>{username}</td>
-    //         <td>{password}</td>
-    //         <td>{email}</td>
-    //       </tr>
-    //     </tbody>
-    //   </table>
-    // )
-    // return(
-    //   <MaterialTable
-    //     title="User Profile Data"
-    //     columns={[
-    //       { title: 'Name', field: {name} },
-    //       { title: 'Username', field: {username} },
-    //       { title: 'Password', field: {password} },
-    //       { title: 'Email', field: {email} }
-    //     ]}
-    //     actions={[
-    //       {
-    //         icon: 'save',
-    //         tooltip: 'Save User',
-    //         onClick: (event, rowData) => alert("You saved " + rowData.name)
-    //       },
-    //       {
-    //         icon: 'delete',
-    //         tooltip: 'Delete User',
-    //         //onClick: (event, rowData) => confirm("You want to delete " + rowData.name)
-    //       }
-    //     ]}
-    //   />
-    // )
-  return (
-    <div className="measure" style={{ float: "center" }}>
-      <a className="db center mw5 black link dim" href="#">
-        <dl className="mt2 f6 lh-copy">
-          {/* <dt className="clip">Name</dt> */}
-          <dt className="ml0 fw9">{name}</dt>
-          <dt className="clip">UserName</dt>
-          <dd className="ml0 fw9">{username}</dd>
-          <dt className="clip">Password</dt>
-          <dd className="m10 fw9">{password}</dd>
-          <dt className="clip">Email</dt>y
-          <dd className="ml0 gray">{email}</dd>
-        </dl>
-      </a>
-    </div>
-  );
-};
+  handleErrors(response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
+  }
+
+  componentDidMount() {
+    console.log("This.props.UserID " + this.props.UserID);
+    fetch("http://localhost:3000/userprofile", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        UserID: this.props.UserID
+      })
+    })
+      .then(response => response.json())
+      .then(output => {
+        if (output != []) {
+          this.setState({
+            UserN: output[0].Username,
+            UserNN: output[0].Name,
+            UserE: output[0].Email,
+            UserP: output[0].Password
+          });
+        }
+      });
+  }
+
+  onEditpress = () => {
+    console.log("HGERE");
+    this.state.readOnly = false;
+    this.forceUpdate();
+  };
+
+  onSubmitSignIn = () => {
+    fetch("http://localhost:3000/editprofile", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: this.state.signInUsername,
+        password: this.state.signInPassword
+      })
+    })
+      .then(this.handleErrors)
+      .then(user => {
+        if (user) {
+          this.props.loadUser(user);
+          this.props.onRouteChange("home");
+        }
+      })
+      .catch(error => console.log(error.response));
+  };
+
+  render() {
+    const { onRouteChange } = this.props;
+    var { UserN, UserP, UserE, UserNN, readOnly } = this.state;
+    console.log(UserN + UserNN + UserE + UserP);
+    return (
+      <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
+        <main className="pa4 black-80">
+          <div className="measure">
+            <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
+              <legend className="f1 fw6 ph0 mh0">My Profile</legend>
+              <div className="mt3">
+                <label className="db fw6 lh-copy f6" htmlFor="email-address">
+                  Name
+                </label>
+                <input
+                  className="pa2 input-reset ba bg-transparent hover-bg-black w-100"
+                  name="email-address"
+                  id="Name"
+                  placeholder={UserN}
+                  readOnly={readOnly}
+                />
+              </div>
+              <div className="mt3">
+                <label className="db fw6 lh-copy f6" htmlFor="email-address">
+                  Email
+                </label>
+                <input
+                  className="pa2 input-reset ba bg-transparent hover-bg-black w-100"
+                  name="email-address"
+                  id="Email"
+                  placeholder={UserE}
+                  readOnly={readOnly}
+                />
+              </div>
+              <div className="mt3">
+                <label className="db fw6 lh-copy f6" htmlFor="email-address">
+                  Username
+                </label>
+                <input
+                  className="pa2 input-reset ba bg-transparent hover-bg-black w-100"
+                  name="email-address"
+                  id="Username"
+                  placeholder={UserNN}
+                  readOnly={readOnly}
+                />
+              </div>
+              <div className="mv3">
+                <label className="db fw6 lh-copy f6" htmlFor="password">
+                  Password
+                </label>
+                <input
+                  className="pa2 input-reset ba bg-transparent hover-bg-black w-100"
+                  name="email-address"
+                  id="Password"
+                  placeholder={UserP}
+                  readOnly={readOnly}
+                />
+              </div>
+            </fieldset>
+            <div className="">
+              <input
+                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+                type="submit"
+                value="Edit"
+                onClick={this.onEditpress}
+              />
+              <input
+                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+                type="submit"
+                value="Submit"
+              />
+              <input
+                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+                type="submit"
+                value="Back"
+              />
+            </div>
+          </div>
+        </main>
+      </article>
+    );
+  }
+}
 
 export default UserCard;

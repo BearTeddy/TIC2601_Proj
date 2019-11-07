@@ -6,6 +6,7 @@ import Register from "./components/Register/Register";
 import AlbumList from "./components/AlbumList/AlbumList";
 import Fileupload from "./components/fileupload/fileupload";
 import Userprofile from "./components/UserCard/UserCard";
+import SongTrans from "./components/SongTrans/SongTrans";
 class App extends Component {
   constructor() {
     super();
@@ -31,6 +32,8 @@ class App extends Component {
       this.setState({ isSignedIn: true });
     } else if (route === "userprofile") {
       this.setState({ isSignedIn: true });
+    } else if (route === "songtransaction") {
+      this.setState({ isSignedIn: true });
     }
     this.setState({ route: route });
   };
@@ -45,7 +48,7 @@ class App extends Component {
         />
 
         {route === "home" ? (
-          <AlbumList />
+          <AlbumList UserID={this.state.user[0].UserID} />
         ) : route === "signin" ? (
           <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         ) : route === "fileupload" ? (
@@ -55,6 +58,8 @@ class App extends Component {
             onRouteChange={this.onRouteChange}
             UserID={this.state.user[0].UserID}
           />
+        ) : route === "songtransaction" ? (
+          <SongTrans UserID={this.state.user[0].UserID} />
         ) : (
           <Register
             loadUser={this.loadUser}

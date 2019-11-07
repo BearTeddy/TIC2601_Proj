@@ -109,13 +109,13 @@ class AlbumList extends React.Component {
                   songtitle={Album.Song_Title}
                   artist={Album.Name}
                   imglink={Album.Album_Artwork}
-                  downloadlink="Download"
                 />
               );
             })}
           </article>
         ) : (
           <AlbumDetails
+            UserID={this.props.UserID}
             onRouteChange={this.onRouteChange}
             loadAlbumDetails={this.loadAlbumDetails}
             AlbumName={AlbumName}

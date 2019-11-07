@@ -19,6 +19,12 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
             Profile
           </a>
           <a
+            onClick={() => onRouteChange("songtransaction")}
+            className="f3 link dim black underline pa3 pointer"
+          >
+            Song Transaction
+          </a>
+          <a
             onClick={() => onRouteChange("fileupload")}
             className="f3 link dim black underline pa3 pointer"
           >

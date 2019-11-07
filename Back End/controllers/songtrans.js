@@ -1,10 +1,10 @@
-const handleAlbumdetails = db => (req, res) => {
-  const { title } = req.body;
+const handleSongtrans = db => (req, res) => {
+  const { userid } = req.body;
   db.query(
     {
       sql:
-        "SELECT Name, Album_Artwork,SongID,Song_Title,b.Price,File_Location FROM album a INNER JOIN song b on (b.AlbumID = a.AlbumID AND a.Album_Title = ? ) INNER JOIN artist c on c.ArtistID = b.ArtistID;",
-      values: [title]
+        "SELECT Song_Title, COUNT(*) AS CountOf FROM songtransaction WHERE UserID=? GROUP BY Song_Title	HAVING COUNT(*)>0",
+      values: [userid]
     },
     function(error, results, fields) {
       if (error) {
@@ -22,5 +22,5 @@ const handleAlbumdetails = db => (req, res) => {
 };
 
 module.exports = {
-  handleAlbumdetails: handleAlbumdetails
+  handleSongtrans: handleSongtrans
 };

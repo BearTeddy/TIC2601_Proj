@@ -9,7 +9,8 @@ class UserCard extends React.Component {
       UserP: "",
       UserE: "",
       UserNN: "",
-      readOnly: true
+      readOnly: true,
+      Message: ""
     };
   }
 
@@ -48,20 +49,53 @@ class UserCard extends React.Component {
     this.forceUpdate();
   };
 
-  onSubmitSignIn = () => {
+  onSubmitProfile = () => {
+    if (document.getElementById("Username").value === "") {
+      document.getElementById("Username").value = document.getElementById(
+        "Username"
+      ).placeholder;
+    }
+
+    if (document.getElementById("Password").value === "") {
+      document.getElementById("Password").value = document.getElementById(
+        "Password"
+      ).placeholder;
+    }
+
+    if (document.getElementById("Name").value === "") {
+      document.getElementById("Name").value = document.getElementById(
+        "Name"
+      ).placeholder;
+    }
+
+    if (document.getElementById("Email").value === "") {
+      document.getElementById("Email").value = document.getElementById(
+        "Email"
+      ).placeholder;
+    }
+    console.log(document.getElementById("Username").value);
+    console.log(document.getElementById("Password").value);
+    console.log(document.getElementById("Name").value);
+    console.log(document.getElementById("Email").value);
     fetch("http://localhost:3000/editprofile", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: this.state.signInUsername,
-        password: this.state.signInPassword
+        username: document.getElementById("Username").value,
+        password: document.getElementById("Password").value,
+        name: document.getElementById("Name").value,
+        email: document.getElementById("Email").value,
+        userid: this.props.UserID
       })
     })
       .then(this.handleErrors)
-      .then(user => {
-        if (user) {
-          this.props.loadUser(user);
-          this.props.onRouteChange("home");
+      .then(responses => {
+        if ((responses = "Ok")) {
+          this.setState({
+            readOnly: true,
+            Message: "Success"
+          });
+          this.forceUpdate();
         }
       })
       .catch(error => console.log(error.response));
@@ -85,7 +119,7 @@ class UserCard extends React.Component {
                   className="pa2 input-reset ba bg-transparent hover-bg-black w-100"
                   name="email-address"
                   id="Name"
-                  placeholder={UserN}
+                  placeholder={UserNN}
                   readOnly={readOnly}
                 />
               </div>
@@ -109,7 +143,7 @@ class UserCard extends React.Component {
                   className="pa2 input-reset ba bg-transparent hover-bg-black w-100"
                   name="email-address"
                   id="Username"
-                  placeholder={UserNN}
+                  placeholder={UserN}
                   readOnly={readOnly}
                 />
               </div>
@@ -125,6 +159,11 @@ class UserCard extends React.Component {
                   readOnly={readOnly}
                 />
               </div>
+              <div className="mv3">
+                <label className="db red fw6 lh-copy f3" htmlFor="password">
+                  {this.state.Message}
+                </label>
+              </div>
             </fieldset>
             <div className="">
               <input
@@ -137,11 +176,16 @@ class UserCard extends React.Component {
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Submit"
+                onClick={this.onSubmitProfile}
               />
+
               <input
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Back"
+                onClick={() => {
+                  this.props.onRouteChange("home");
+                }}
               />
             </div>
           </div>

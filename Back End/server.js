@@ -13,7 +13,9 @@ const albumlist = require("./controllers/albumlist");
 const fileupload = require("./controllers/fileupload");
 const userprofile = require("./controllers/userprofile");
 const albumdetails = require("./controllers/albumdetails");
-
+const editprofile = require("./controllers/editprofile");
+const filedownload = require("./controllers/filedownload");
+const Songtrans = require("./controllers/songtrans");
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -47,6 +49,12 @@ app.post("/upload", fileupload.handleFileupload(db, fs));
 app.post("/userprofile", userprofile.handleProfile(db));
 
 app.post("/searchalbdetails", albumdetails.handleAlbumdetails(db));
+
+app.post("/editprofile", editprofile.handleEditprofile(db));
+
+app.post("/filedownload", filedownload.handleFiledownload(db));
+
+app.post("/songtrans", Songtrans.handleSongtrans(db));
 
 app.listen(3000, () => {
   console.log("Application listening on port 3000!");

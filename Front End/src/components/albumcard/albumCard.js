@@ -33,7 +33,11 @@ class AlbumCard extends React.Component {
             <dd className="ml0 gray">{this.props.Album_Title}</dd>
           </dl>
         </a>
-        <p className="f6 blue">Download</p>
+          <p className="f6 blue"
+            onClick={this.onAlbumClick}
+          >
+            Download
+          </p>
       </div>
     );
   }

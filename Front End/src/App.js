@@ -5,7 +5,8 @@ import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 import AlbumList from "./components/AlbumList/AlbumList";
 import Fileupload from "./components/fileupload/fileupload";
-import Userprofile from "./components/UserCard/UserCard";
+// import Userprofile from "./components/UserCard/UserCard";
+import Userprofile from "./components/userprofile/userprofile";
 import SongTrans from "./components/SongTrans/SongTrans";
 class App extends Component {
   constructor() {

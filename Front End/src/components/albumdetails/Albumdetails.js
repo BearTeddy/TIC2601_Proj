@@ -86,7 +86,7 @@ class Albumdetails extends React.Component {
        
         <div className="w3-container" style = {{display : "center"}}>
           <th>
-            <img src={imgsrc} class="w-40 f4 measure:1em" alt="Photo of outer space" />
+            <img className="db ba b--black-10" style={{ minHeight: 40, minWidth: 60 }} src={imgsrc} class="w-40 f4 measure:1em" alt="Photo of outer space" />
           </th>
           <tbody className="mw5 black link">
             {this.state.dataresults.map((Album, i) => {
